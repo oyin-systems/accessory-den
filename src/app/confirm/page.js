@@ -7,7 +7,7 @@ const Account = () => {
   return (
     <>
       <Header />
-      <div className="container mx-auto my-32 py-10 w-fit p-10 rounded-2xl space-y-2 text-center">
+      <div className="container mx-auto my-32 py-10 w-screen p-10 rounded-2xl space-y-2 text-center">
         <Image
           src={complete}
           alt="complete sign"

@@ -9,8 +9,8 @@ const Checkout = () => {
   return (
     <>
       <Header />
-      <section className="flex flex-col lg:flex-row">
-        <div className="container px-12 py-10 bg-white lg:w-[60%]">
+      <section className="w-screen flex flex-col lg:flex-row">
+        <div className="container px-12 py-10 bg-white md:w-[60%]">
           <h1 className="text-xl font-bold mb-6">Billing Details</h1>
           <form className="space-y-4 mb-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -99,6 +99,52 @@ const Checkout = () => {
             </div>
           </form>
 
+          {/* mobile */}
+          <div className="container block ml-[-40px] md:ml-0 md:hidden mt-2 md:mt-10 px-3 md:px-12 py-10 md:w-[40%] mb-5 md:mb-20">
+            <div className="w-[90vw] md:w-[475px] h-[330px] rounded-2xl bg-[#FAFAFA]">
+              <h1 className="text-xl font-bold mb-6 text-center py-4">
+                Cart Summary
+              </h1>
+              <div className="flex items-center justify-between px-8 mb-8">
+                <div>
+                  <h3 className="text-base font-semibold leading-5 text-[#313131] mb-1">
+                    5 X Eclipse Chrono
+                  </h3>
+                  <p className="text-[10px] leading-3 font-normal text-[#797F8B]">
+                    Sleek modern chronograph with
+                    <br />a black dial
+                  </p>
+                </div>
+                <h3 className="text-xl font-semibold leading-7 text-[#313131]">
+                  NGN 180,000
+                </h3>
+              </div>
+              <div className="flex items-center justify-between px-8 mb-8">
+                <div>
+                  <h3 className="text-base font-semibold leading-5 text-[#313131] mb-1">
+                    2 X Urban Classic
+                  </h3>
+                  <p className="text-[10px] leading-3 font-normal text-[#797F8B]">
+                    Sleek modern chronograph with
+                    <br />a black dial
+                  </p>
+                </div>
+                <h3 className="text-xl font-semibold leading-7 text-[#313131]">
+                  NGN 100,000
+                </h3>
+              </div>
+              <hr />
+              <div className="flex items-center justify-end mt-4 mr-6">
+                <p className="mr-4 text-sm leading-3 font-normal text-[#797F8B]">
+                  Total
+                </p>
+                <h3 className="text-xl font-semibold leading-7 text-[#797F8B]">
+                  NGN 280,000
+                </h3>
+              </div>
+            </div>
+          </div>
+
           <h1 className="text-xl font-bold mb-6">Payment Method</h1>
           <form className="space-y-4">
             <div>
@@ -178,15 +224,15 @@ const Checkout = () => {
               </div>
             </div>
             <Link href="/confirm">
-              <button className="mt-10 ml-[200px] h-[57px] w-[276px] bg-[#0B7D6A] text-white py-2 px-6 rounded-2xl">
+              <button className="mt-10 ml-[70px] md:ml-[200px] h-[57px] w-[185px] md:w-[276px] bg-[#0B7D6A] text-white py-2 px-6 rounded-2xl">
                 Place Order
               </button>
             </Link>
           </form>
         </div>
 
-        <div className="container  mt-10 px-12 py-10 lg:w-[40%]">
-          <div className="w-[475px] h-[330px] rounded-2xl bg-[#FAFAFA]">
+        <div className="container hidden md:block mt-4 md:mt-10 px-3 md:px-12 py-10 md:w-[40%] mb-20">
+          <div className="w-[90vw] md:w-[475px] h-[330px] rounded-2xl bg-[#FAFAFA]">
             <h1 className="text-xl font-bold mb-6 text-center py-4">
               Cart Summary
             </h1>

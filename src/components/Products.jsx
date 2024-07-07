@@ -29,12 +29,12 @@ const Products = () => {
   return (
     <section id="products" className="px-5 md:px-20 py-1 md:py-20 w-screen">
       <div className="container mx-auto">
-        <h2 className="text-xl md:text-3xl font-bold mb-16 text-left">Wristwatch for you!</h2>
+        <h2 className="text-xl md:text-3xl font-bold mx-5 mb-8 md:mb-16 text-left">Wristwatch for you!</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
           {products.map((product) => (
             <div 
               key={product.id} 
-              className={`bg-white w-[380px] md:w-[223px] h-[350px] md:h-[290px] space-y-1.5 ${product.display ? 'hidden md:block' : 'block md:hidden'}`}
+              className={`bg-white w-[80vw] mx-5 md:w-[223px] h-[350px] md:h-[290px] space-y-1.5 ${product.display ? 'hidden md:block' : 'block md:hidden'}`}
             >
               <div className='rounded-lg bg-[#FAFAFA] flex items-center justify-center relative'>
                 <Image src={product.image} alt={product.name} width={176} height={130} className="object-cover mb-4 w-[300px] md:w-[176px] h-[200px] md:h-[130px]" />

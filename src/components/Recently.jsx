@@ -14,10 +14,10 @@ const Recently = () => {
   return (
     <section className="px-5 md:px-20 py-1 md:py-20 w-screen">
       <div className="container mx-auto">
-        <h2 className="text-xl md:text-3xl font-bold mb-16 text-left">Recently viewed</h2>
+        <h2 className="text-xl md:text-3xl font-bold mx-5 mt-10 md:mt-0 mb-8 md:mb-16 text-left">Recently viewed</h2>
         <div className="grid grid-cols-4 gap-16">
           {recents.map((recent) => (
-            <div key={recent.id} className={`bg-white w-[380px] md:w-[223px] h-[350px] md:h-[290px] space-y-1.5 ${recent.display ? 'hidden md:block' : 'block md:hidden'}`}>
+            <div key={recent.id} className={`bg-white w-[80vw] mx-5 md:w-[223px] h-[350px] md:h-[290px] space-y-1.5 ${recent.display ? 'hidden md:block' : 'block md:hidden'}`}>
               <div className='rounded-lg bg-[#FAFAFA] flex items-center justify-center'>
                 <Image src={recent.image} alt={recent.name} width={176} height={130} className="w-[300px] md:w-[176px] h-[200px] md:h-[130px] object-cover mb-4" />
               </div>
