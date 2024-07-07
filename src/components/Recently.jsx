@@ -3,22 +3,23 @@ import Image from 'next/image';
 import StarRating from './StarRating';
 
 const recents = [
-    { id: 1, name: "Elite Chronograph", rating: 4, description: "Striking starry dial", price: "NGN 85,000", image: "/images/elite.png" },
-    { id: 2, name: "Timeless Elegance", rating: 4, description: "Striking starry dial", price: "NGN 95,000", image: "/images/timeless.png" },
-    { id: 3, name: "Luxery Timepiece", rating: 4, description: "Luxurious, minimalist", price: "NGN 75,000", image: "/images/luxery.png" },
-    { id: 4, name: "Urban CLassic", rating: 4, description: "Stylish everyday wear", price: "NGN 45,000", image: "/images/urbangrey.png" }, 
+    { id: 1, name: "Elite Chronograph", rating: 4, description: "Striking starry dial", price: "NGN 85,000", display: true, image: "/images/elite.png" },
+    { id: 2, name: "Timeless Elegance", rating: 4, description: "Striking starry dial", price: "NGN 95,000", display: true, image: "/images/timeless.png" },
+    { id: 3, name: "Luxery Timepiece", rating: 4, description: "Luxurious, minimalist", price: "NGN 75,000", display: true, image: "/images/luxery.png" },
+    { id: 4, name: "Urban CLassic", rating: 4, description: "Stylish everyday wear", price: "NGN 45,000", display: true, image: "/images/urbangrey.png" }, 
+    { id: 5, name: "Stellar Watch", rating: 4, description: "Stylish everyday wear", price: "NGN 35,000", display: false, image: "/images/urbanblue.png" }, 
 ];
 
 const Recently = () => {
   return (
-    <section className="px-20 py-20">
+    <section className="px-5 md:px-20 py-1 md:py-20 w-screen">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold mb-16 text-left">Recently viewed</h2>
+        <h2 className="text-xl md:text-3xl font-bold mb-16 text-left">Recently viewed</h2>
         <div className="grid grid-cols-4 gap-16">
           {recents.map((recent) => (
-            <div key={recent.id} className="bg-white w-[223px] h-[290px] space-y-1.5">
-              <div className='w-[223px] h-[151px] rounded-lg bg-[#FAFAFA] flex items-center justify-center'>
-                <Image src={recent.image} alt={recent.name} width={176} height={130} className="w-[176px] h-[130px] object-cover mb-4" />
+            <div key={recent.id} className={`bg-white w-[380px] md:w-[223px] h-[350px] md:h-[290px] space-y-1.5 ${recent.display ? 'hidden md:block' : 'block md:hidden'}`}>
+              <div className='rounded-lg bg-[#FAFAFA] flex items-center justify-center'>
+                <Image src={recent.image} alt={recent.name} width={176} height={130} className="w-[300px] md:w-[176px] h-[200px] md:h-[130px] object-cover mb-4" />
               </div>
               <div className='flex items-center justify-between'>
                 <h3 className="text-base font-medium">{recent.name}</h3>
