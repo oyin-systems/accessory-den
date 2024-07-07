@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import heroimage from 'public/images/hero.png'
+import Link from 'next/link';
 
 
 const Hero = () => {
@@ -9,7 +10,9 @@ const Hero = () => {
       <div className="flex items-center justify-between w-full">
         <div>
           <h1 className="text-4xl font-medium leading-[48px] text-[#313131]">Grab up to 20% discount on <br/> selected Wrist Watch</h1>
+          <Link href="/checkout">
           <button className="bg-[#0B7D6A] font-normal text-white text-base leading-5 py-4 px-10 rounded-2xl w-[165px] h-[51px] mt-8 text-center">Buy Now</button>
+          </Link>
         </div>
         <div>
         <Image
