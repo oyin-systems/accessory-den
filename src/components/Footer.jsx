@@ -17,7 +17,7 @@ const secFont = localFont({
 
 const Footer = () => {
   return (
-    <footer className={`bg-[#0B7D6A1A] text-black px-20 py-20 mt-40 h-[400px] flex items-center ${pryFont.className}`}>
+    <footer id="contact" className={`bg-[#0B7D6A1A] text-black px-20 py-20 mt-40 h-[400px] flex items-center ${pryFont.className}`}>
       <div className='flex items-center'>
         <div className='mr-32'>
           <h1 className={`text-3xl leading-[46px] font-normal text-[#0B7D6A] mb-6 ${secFont.className}`}>
