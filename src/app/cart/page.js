@@ -99,6 +99,36 @@ const Cart = () => {
           ))}
         </div>
 
+        <div className="hidden md:flex justify-between items-center mx-auto my-10 bg-white text-[#797F8B]">
+          <div className="flex items-center justify-between w-[200px] h-[56px] px-4 rounded-lg border border-[#E6E6E6]">
+            <p className="text-xs font-normal leading-5 ">Discount</p>
+            <h2 className="text-base font-medium leading-8">NGN 0</h2>
+          </div>
+          <div className="flex items-center justify-between w-[200px] h-[56px] px-4 rounded-lg border border-[#E6E6E6]">
+            <p className="text-xs font-normal leading-5 ">Delivery</p>
+            <h2 className="text-base font-medium leading-8">NGN 0</h2>
+          </div>
+          <div className="flex items-center justify-between w-[220px] h-[56px] px-4 rounded-lg border border-[#E6E6E6]">
+            <p className="text-xs font-normal leading-5 ">Subtotal</p>
+            <h2 className="text-base font-medium leading-8">NGN 280,000</h2>
+          </div>
+          <div className="flex items-center justify-between w-[240px] h-[56px] px-4 rounded-lg border border-[#E6E6E6]">
+            <p className="text-xs font-normal leading-5 ">Total</p>
+            <h2 className="text-2xl font-medium leading-8">NGN 280,000</h2>
+          </div>
+        </div>
+
+        <div className="md:hidden w-[80vw] mx-10 mt-10 bg-white text-[#797F8B]">
+          <div className="flex justify-between">
+            <p className="text-xs font-normal leading-5 ">Subtotal</p>
+            <h2 className="text-xl font-medium leading-8">NGN 280,000</h2>
+          </div>
+          <div className="flex justify-between">
+            <p className="text-xs font-normal leading-5 ">Total</p>
+            <h2 className="text-2xl font-medium leading-9">NGN 280,000</h2>
+          </div>
+        </div>
+
         <div className="flex flex-col md:flex-row items-center">
           <div className="w-[350px] md:w-[820px] container flex items-center md:mr-20 rounded-lg md:rounded-2xl bg-white mt-10 border border-[#E6E6E6]">
             <div className="flex items-center w-fit h-11 md:h-[90px] p-2 md:p-5">
