@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import StarRating from './StarRating';
+import Link from "next/link";
 
 const products = [
   { id: 1, name: "Eclipse Chrono", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 45,000", display: true, image: "/images/eclipse.png" },
@@ -36,10 +37,11 @@ const Products = () => {
               key={product.id} 
               className={`bg-white w-[80vw] mx-5 md:w-[223px] h-[350px] md:h-[290px] space-y-1.5 ${product.display ? 'hidden md:block' : 'block md:hidden'}`}
             >
-              <div className='rounded-lg bg-[#FAFAFA] flex items-center justify-center relative'>
+            <Link href="/product"><div className='rounded-lg bg-[#FAFAFA] flex items-center justify-center relative'>
                 <Image src={product.image} alt={product.name} width={176} height={130} className="object-cover mb-4 w-[300px] md:w-[176px] h-[200px] md:h-[130px]" />
                 {/* <Image src='/images/heart.png' alt="heart" width={24} height={24} className="absolute top-[30px] right-[15px]" /> */}
-              </div>
+              </div></Link>
+              
               <div className='flex items-center justify-between'>
                 <h3 className="text-base font-medium">{product.name}</h3>
                 <StarRating rating={product.rating} />
