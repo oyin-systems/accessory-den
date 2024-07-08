@@ -49,8 +49,8 @@ const Header = () => {
           </div>
 
           <div className="flex mr-10 md:mr-2">
-            <Image src="/images/cart.png" alt="cart" width={24} height={24} className="mr-2"/>
-            <Link href="/cart" className="hover:text-gray-400">Cart</Link>
+          <Link href="/cart"><Image src="/images/cart.png" alt="cart" width={24} height={24} className="mr-2"/></Link>
+          <Link href="/cart" className="hover:text-gray-400">Cart</Link>
           </div>
         </div>
       </div>
