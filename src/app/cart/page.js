@@ -11,8 +11,8 @@ const Cart = () => {
         <h1 className="text-xl md:text-3xl text-center font-bold py-10">
           My Shopping Cart
         </h1>
-        <div className="container py-5 md:py-10 bg-[#FAFAFA] rounded-3xl">
-          <div className="grid grid-cols-5 mb-4 text-[#404859] text-xs md:text-sm">
+        <div className="container py-2 md:py-10 bg-[#FAFAFA] rounded-3xl">
+          <div className="hidden md:grid grid-cols-5 mb-4 text-[#404859] text-xs md:text-sm">
             <div className="font-semibold uppercase ml-4 md:ml-16">Product</div>
             <div className="font-semibold uppercase ml-14 md:ml-0">
               Description
@@ -25,7 +25,7 @@ const Cart = () => {
               Subtotal
             </div>
           </div>
-          <hr />
+          <hr className="hidden md:block" />
           {[
             {
               id: 1,
@@ -48,7 +48,7 @@ const Cart = () => {
           ].map((product) => (
             <div
               key={product.id}
-              className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-8 md:mb-16 mt-4"
+              className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-4 md:mb-16 mt-4"
             >
               <div>
                 <Image
@@ -71,7 +71,7 @@ const Cart = () => {
                 {product.price}
                 <div className="md:hidden flex items-center justify-center space-x-1 md:space-x-2 bg-white rounded-3xl h-fit w-fit p-2 ml-4 md:ml-10 mt-4">
                   <div className="rounded-full bg-gray-300 w-6 md:w-8 h-6 md:h-8 flex items-center justify-center">
-                    <span className="text-[#F2F2F2]">-</span>
+                    <span className="text-black">-</span>
                   </div>
                   <span className="px-2 py-1 text-base md:text-lg font-medium">
                     {product.quantity}
@@ -83,7 +83,7 @@ const Cart = () => {
               </div>
               <div className="hidden md:flex items-center justify-center space-x-1 md:space-x-2 bg-white rounded-3xl h-fit w-fit p-2 md:ml-10 ">
                 <div className="rounded-full bg-gray-300 w-6 md:w-8 h-6 md:h-8 flex items-center justify-center">
-                  <span className="text-[#F2F2F2]">-</span>
+                  <span className="text-black">-</span>
                 </div>
                 <span className="px-2 py-1 text-base md:text-lg font-medium">
                   {product.quantity}
@@ -118,14 +118,14 @@ const Cart = () => {
           </div>
         </div>
 
-        <div className="md:hidden w-[80vw] mx-10 mt-10 bg-white text-[#797F8B]">
+        <div className="md:hidden w-[80vw] mx-10 mt-5 bg-white text-[#797F8B]">
           <div className="flex justify-between">
-            <p className="text-xs font-normal leading-5 ">Subtotal</p>
-            <h2 className="text-xl font-medium leading-8">NGN 280,000</h2>
+            <p className="text-sm font-normal leading-5 ">Subtotal</p>
+            <h2 className="text-base font-medium leading-8">NGN 280,000</h2>
           </div>
           <div className="flex justify-between">
-            <p className="text-xs font-normal leading-5 ">Total</p>
-            <h2 className="text-2xl font-medium leading-9">NGN 280,000</h2>
+            <p className="text-sm font-normal leading-5 ">Total</p>
+            <h2 className="text-xl font-medium leading-9">NGN 280,000</h2>
           </div>
         </div>
 

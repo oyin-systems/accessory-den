@@ -21,7 +21,7 @@ const Header = () => {
           <Link href="/"> Accessory Den</Link>
           </div>
         <nav className='hidden md:block'>
-          <ul className="flex space-x-4">
+          <ul className="flex space-x-12">
             <li>
               <a href="#products" className="hover:text-gray-400">
                 Products

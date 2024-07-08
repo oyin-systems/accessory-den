@@ -115,7 +115,7 @@ const Checkout = () => {
                     <br />a black dial
                   </p>
                 </div>
-                <h3 className="text-xl font-semibold leading-7 text-[#313131]">
+                <h3 className="text-lg font-semibold leading-7 text-[#313131]">
                   NGN 180,000
                 </h3>
               </div>
@@ -129,16 +129,16 @@ const Checkout = () => {
                     <br />a black dial
                   </p>
                 </div>
-                <h3 className="text-xl font-semibold leading-7 text-[#313131]">
+                <h3 className="text-lg font-semibold leading-7 text-[#313131]">
                   NGN 100,000
                 </h3>
               </div>
               <hr />
-              <div className="flex items-center justify-end mt-4 mr-6">
-                <p className="mr-4 text-sm leading-3 font-normal text-[#797F8B]">
+              <div className="flex items-center justify-between mt-4 mr-6">
+                <p className="ml-10 text-sm leading-3 font-normal text-[#797F8B]">
                   Total
                 </p>
-                <h3 className="text-xl font-semibold leading-7 text-[#797F8B]">
+                <h3 className="text-lg mr-2 font-semibold leading-7 text-[#797F8B]">
                   NGN 280,000
                 </h3>
               </div>
