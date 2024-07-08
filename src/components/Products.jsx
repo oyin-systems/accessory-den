@@ -38,7 +38,7 @@ const Products = () => {
             >
               <div className='rounded-lg bg-[#FAFAFA] flex items-center justify-center relative'>
                 <Image src={product.image} alt={product.name} width={176} height={130} className="object-cover mb-4 w-[300px] md:w-[176px] h-[200px] md:h-[130px]" />
-                <Image src='/images/heart.png' alt="heart" width={24} height={24} className="absolute top-[30px] right-[15px]" />
+                {/* <Image src='/images/heart.png' alt="heart" width={24} height={24} className="absolute top-[30px] right-[15px]" /> */}
               </div>
               <div className='flex items-center justify-between'>
                 <h3 className="text-base font-medium">{product.name}</h3>
