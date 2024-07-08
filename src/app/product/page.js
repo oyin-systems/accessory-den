@@ -116,7 +116,7 @@ const SingleProduct = () => {
                       Only <span className="text-[#0B7D6A]">12 items</span>{" "}
                       left!
                     </p>
-                    <p>Don't miss it</p>
+                    <p>Don&apos;t miss it</p>
                   </div>
                 </div>
 
