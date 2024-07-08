@@ -119,11 +119,11 @@ const Cart = () => {
         </div>
 
         <div className="md:hidden w-[80vw] mx-10 mt-5 bg-white text-[#797F8B]">
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between">
             <p className="text-sm font-normal leading-5 ">Subtotal</p>
             <h2 className="text-base font-medium leading-8">NGN 280,000</h2>
           </div>
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between">
             <p className="text-sm font-normal leading-5 ">Total</p>
             <h2 className="text-xl font-medium leading-9">NGN 280,000</h2>
           </div>
