@@ -11,29 +11,26 @@ const Products = () => {
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [nextPageUrl, setNextPageUrl] = useState(null);
-  const [prevPageUrl, setPrevPageUrl] = useState(null);
   const productsPerPage = 10;
   const { addToCart } = useCart();
 
   useEffect(() => {
-    const fetchProducts = async (page) => {
+    const fetchProducts = async () => {
       try {
-        const response = await fetch(`/api/timbu?page=${page}&size=${productsPerPage}`);
+        const response = await fetch(`/api/timbu?page=${currentPage}&size=${productsPerPage}`);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
         const data = await response.json();
+        console.log("Fetched Data for Page:", currentPage, data);
         setProducts(data.items);
         setTotalPages(Math.ceil(data.total / productsPerPage));
-        setNextPageUrl(data.next_page);
-        setPrevPageUrl(data.previous_page);
       } catch (error) {
         setError(error.message);
       }
     };
 
-    fetchProducts(currentPage);
+    fetchProducts();
   }, [currentPage]);
 
   // Pagination controls
@@ -81,7 +78,7 @@ const Products = () => {
                 <StarRating rating={4} />
               </div>
               <p className="text-gray-700 text-sm">{product.description}</p>
-              <p className="text-base font-medium">NGN {product.current_price[0]?.NGN[0]}</p>
+              <p className="text-base font-medium">NGN {product.current_price[0]?.NGN?.[0] || 'N/A'}</p>
               <button
                 onClick={() => addToCart(product)}
                 className="bg-white text-xs text-[#0B7D6A] border border-[#0B7D6A] hover:bg-[#0B7D6A] hover:text-white rounded-[116px] mt-2 w-[119px] h-[36px] py-2.5 px-6"
@@ -124,5 +121,3 @@ const Products = () => {
 };
 
 export default Products;
-
-

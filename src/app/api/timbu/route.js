@@ -1,7 +1,11 @@
 export async function GET(request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const page = searchParams.get("page") || 1;
+    const size = searchParams.get("size") || 10;
+
     const response = await fetch(
-      "https://api.timbu.cloud/products?organization_id=9664c043b1c24c8dafdcdf85eac455ee&reverse_sort=false&page=2&size=10&Appid=FSV9IJDICP13JWC&Apikey=f91c90b878c544c6ad320611afbc7b5320240712123748804782",
+      `https://api.timbu.cloud/products?organization_id=9664c043b1c24c8dafdcdf85eac455ee&reverse_sort=false&page=${page}&size=${size}&Appid=FSV9IJDICP13JWC&Apikey=f91c90b878c544c6ad320611afbc7b5320240712123748804782`,
       {
         headers: {
           Authorization: `Bearer ${process.env.TIMBU_API_KEY}`,
