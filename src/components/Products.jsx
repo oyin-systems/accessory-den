@@ -1,118 +1,244 @@
-import React from 'react';
-import Image from 'next/image';
-import StarRating from './StarRating';
-import Link from "next/link";
+"use client";
 
-const products = [
-  { id: 1, name: "Eclipse Chrono", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 45,000", display: true, image: "/images/eclipse.png" },
-  { id: 2, name: "Luxe Timepiece", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 65,000", display: true, image: "/images/luxe.png" },
-  { id: 3, name: "Urban Classic", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 35,000", display: true, image: "/images/urbanblue.png" },
-  { id: 4, name: "Stellar Watch", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 80,000", display: true, image: "/images/stellarwatchgreen.png" },
-  { id: 5, name: "Elite Chronograph", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 85,000", display: true, image: "/images/elite.png" },
-  { id: 6, name: "Timeless Elegance", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 85,000", display: true, image: "/images/timeless.png" },
-  { id: 7, name: "Luxury Timepiece", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 75,000", display: true, image: "/images/luxery.png" },
-  { id: 8, name: "Urban Classic", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 45,000", display: true, image: "/images/urbangrey.png" },
-  { id: 9, name: "Zenith Time", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 115,000", display: true, image: "/images/zenith.png" },
-  { id: 10, name: "Luxe Timepiece", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 95,000", display: true, image: "/images/luxetime.png" },
-  { id: 11, name: "Stellar Watch", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 75,000", display: true, image: "/images/stellarwatchgray.png" },
-  { id: 12, name: "Regar Watch", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 65,000", display: true, image: "/images/regarwatch.png" },
-  { id: 13, name: "Eclipse Chrono", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 78,000", display: true, image: "/images/eclipsechrono.png" },
-  { id: 14, name: "Elite Chronograph", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 125,000", display: true, image: "/images/elitechrono.png" },
-  { id: 15, name: "Timeless Elegance", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 105,000", display: true, image: "/images/timelesselegance.png" },
-  { id: 16, name: "Zenith Time", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 25,000", display: true, image: "/images/elite.png" },
-  { id: 17, name: "Eclipse Chrono", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 45,000", display: false, image: "/images/eclipse.png" },
-  { id: 18, name: "Luxe Timepiece", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 65,000", display: false, image: "/images/luxe.png" },
-  { id: 19, name: "Urban Classic", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 35,000", display: false, image: "/images/urbanblue.png" },
-  { id: 20, name: "Stellar Watch", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 80,000", display: false, image: "/images/stellarwatchgreen.png" },
-];
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import StarRating from "./StarRating";
+import Link from "next/link";
+import { useCart } from "../context/CartContext";
 
 const Products = () => {
+  const [products, setProducts] = useState([]);
+  const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [nextPageUrl, setNextPageUrl] = useState(null);
+  const [prevPageUrl, setPrevPageUrl] = useState(null);
+  const productsPerPage = 10;
+  const { addToCart } = useCart();
+
+  useEffect(() => {
+    const fetchProducts = async (page) => {
+      try {
+        const response = await fetch(`/api/timbu?page=${page}&size=${productsPerPage}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await response.json();
+        setProducts(data.items);
+        setTotalPages(Math.ceil(data.total / productsPerPage));
+        setNextPageUrl(data.next_page);
+        setPrevPageUrl(data.previous_page);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchProducts(currentPage);
+  }, [currentPage]);
+
+  // Pagination controls
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <section id="products" className="px-5 md:px-20 py-1 md:py-20 w-screen">
       <div className="container mx-auto">
         <h2 className="text-xl md:text-3xl font-bold mx-5 mb-8 md:mb-16 text-left">Wristwatch for you!</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
           {products.map((product) => (
-            <div 
-              key={product.id} 
-              className={`bg-white w-[80vw] mx-5 md:w-[223px] h-[350px] md:h-[290px] space-y-1.5 ${product.display ? 'hidden md:block' : 'block md:hidden'}`}
+            <div
+              key={product.unique_id}
+              className={`bg-white w-[80vw] mx-5 md:w-[223px] h-[350px] md:h-[290px] space-y-1.5`}
             >
-            <Link href="/product"><div className='rounded-lg bg-[#FAFAFA] flex items-center justify-center relative'>
-                <Image src={product.image} alt={product.name} width={176} height={130} className="object-cover mb-4 w-[300px] md:w-[176px] h-[200px] md:h-[130px]" />
-                {/* <Image src='/images/heart.png' alt="heart" width={24} height={24} className="absolute top-[30px] right-[15px]" /> */}
-              </div></Link>
-              
-              <div className='flex items-center justify-between'>
+              <Link href={`/product/${product.url_slug}`}>
+                <div className="rounded-lg bg-[#FAFAFA] flex items-center justify-center relative">
+                  <Image
+                    src={`https://api.timbu.cloud/images/${product.photos[0]?.url}`}
+                    alt={product.name}
+                    width={176}
+                    height={130}
+                    priority={true}
+                    className="object-cover mb-4 w-[300px] md:w-[176px] h-[200px] md:h-[130px]"
+                  />
+                </div>
+              </Link>
+
+              <div className="flex items-center justify-between">
                 <h3 className="text-base font-medium">{product.name}</h3>
-                <StarRating rating={product.rating} />
+                <StarRating rating={4} />
               </div>
               <p className="text-gray-700 text-sm">{product.description}</p>
-              <p className="text-base font-medium">{product.price}</p>
-              <button className="bg-white text-xs text-[#0B7D6A] border border-[#0B7D6A] hover:bg-[#0B7D6A] hover:text-white rounded-[116px] mt-2 w-[119px] h-[36px] py-2.5 px-6">Add to Cart</button>
+              <p className="text-base font-medium">NGN {product.current_price[0]?.NGN[0]}</p>
+              <button
+                onClick={() => addToCart(product)}
+                className="bg-white text-xs text-[#0B7D6A] border border-[#0B7D6A] hover:bg-[#0B7D6A] hover:text-white rounded-[116px] mt-2 w-[119px] h-[36px] py-2.5 px-6"
+              >
+                Add to Cart
+              </button>
             </div>
           ))}
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 mx-1 ${currentPage === 1 ? 'bg-gray-300' : 'bg-[#0B7D6A] text-white'}`}
+          >
+            Prev
+          </button>
+          {[...Array(totalPages).keys()].map((number) => (
+            <button
+              key={number + 1}
+              onClick={() => setCurrentPage(number + 1)}
+              className={`px-4 py-2 mx-1 ${currentPage === number + 1 ? 'bg-[#0B7D6A] text-white' : 'bg-white text-[#0B7D6A] border border-[#0B7D6A]'}`}
+            >
+              {number + 1}
+            </button>
+          ))}
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 mx-1 ${currentPage === totalPages ? 'bg-gray-300' : 'bg-[#0B7D6A] text-white'}`}
+          >
+            Next
+          </button>
         </div>
       </div>
     </section>
   );
-}
+};
 
 export default Products;
 
-// import React from 'react';
-// import Image from 'next/image';
-// import StarRating from './StarRating';
 
-// const products = [
-//   { id: 1, name: "Eclipse Chrono", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 45,000", display: true, image: "/images/eclipse.png" },
-//   { id: 2, name: "Luxe Timepiece", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 65,000", display: true, image: "/images/luxe.png" },
-//   { id: 3, name: "Urban Classic", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 35,000", display: true, image: "/images/urbanblue.png" },
-//   { id: 4, name: "Stellar Watch", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 80,000", display: true, image: "/images/stellarwatchgreen.png" },
-//   { id: 5, name: "Elite Chronograph", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 85,000", display: true, image: "/images/elite.png" },
-//   { id: 6, name: "Timeless Elegance", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 85,000", display: true, image: "/images/timeless.png" },
-//   { id: 7, name: "Luxery Timepiece", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 75,000", display: true, image: "/images/luxery.png" },
-//   { id: 8, name: "Urban CLassic", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 45,000", display: true, image: "/images/urbangrey.png" },
-//   { id: 9, name: "Zenith Time", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 115,000", display: true, image: "/images/zenith.png" },
-//   { id: 10, name: "Luxe Timepiece", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 95,000", display: true, image: "/images/luxetime.png" },
-//   { id: 11, name: "Stellar Watch", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 75,000", display: true, image: "/images/stellarwatchgray.png" },
-//   { id: 12, name: "Regar Watch", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 65,000", display: true, image: "/images/regarwatch.png" },
-//   { id: 13, name: "Eclipse Chrono", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 78,000", display: true, image: "/images/eclipsechrono.png" },
-//   { id: 14, name: "Elite Chronograph", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 125,000", display: true, image: "/images/elitechrono.png" },
-//   { id: 15, name: "Timeless Elegance", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 105,000", display: true, image: "/images/timelesselegance.png" },
-//   { id: 16, name: "Zenith Time", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 25,000", display: true, image: "/images/elite.png" },
-//   { id: 17, name: "Eclipse Chrono", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 45,000", display: false, image: "/images/eclipse.png" },
-//   { id: 18, name: "Luxe Timepiece", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 65,000", display: false, image: "/images/luxe.png" },
-//   { id: 19, name: "Urban Classic", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 35,000", display: false, image: "/images/urbanblue.png" },
-//   { id: 20, name: "Stellar Watch", rating: 4, description: "Sleek Modern Chronograph", price: "NGN 80,000", display: false, image: "/images/stellarwatchgreen.png" },
-// ];
+// "use client";
+
+// import React, { useEffect, useState } from "react";
+// import Image from "next/image";
+// import StarRating from "./StarRating";
+// import Link from "next/link";
+// import { useCart } from "../context/CartContext";
 
 // const Products = () => {
+//   const [products, setProducts] = useState([]);
+//   const [error, setError] = useState("");
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const productsPerPage = 10;
+//   const { addToCart } = useCart();
+
+//   useEffect(() => {
+//     const fetchProducts = async () => {
+//       try {
+//         const response = await fetch("/api/timbu");
+//         if (!response.ok) {
+//           throw new Error("Failed to fetch products");
+//         }
+//         const data = await response.json();
+//         setProducts(data.items);
+//       } catch (error) {
+//         setError(error.message);
+//       }
+//     };
+
+//     fetchProducts();
+//   }, []);
+
+//   // Get current products
+//   const indexOfLastProduct = currentPage * productsPerPage;
+//   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+//   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+//   // Change page
+//   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+//   if (error) {
+//     return <div>{error}</div>;
+//   }
+
 //   return (
-//     // <section className="px-5 md:px-20 mx-auto h-[251px] md:h-[407px]  bg-white rounded-3xl"></section>
 //     <section id="products" className="px-5 md:px-20 py-1 md:py-20 w-screen">
 //       <div className="container mx-auto">
-//         <h2 className="text-3xl font-bold mb-16 text-left">Wristwatch for you!</h2>
-//         <div className="grid grid-cols-1 lg:grid-cols-4 gap-16">
-//           {products.map((product) => (
-//             <div key={product.id} className="bg-white w-[223px] h-[290px] space-y-1.5">
-//               <div className='w-[223px] h-[151px] rounded-lg bg-[#FAFAFA] flex items-center justify-center relative'>
-//                 <Image src={product.image} alt={product.name} width={176} height={130} className="object-cover mb-4" />
-//                 <Image src='/images/heart.png' alt="heart" width={24} height={24} className="absolute top-[30px] right-[15px]" />
-//               </div>
-//               <div className='flex items-center justify-between'>
+//         <h2 className="text-xl md:text-3xl font-bold mx-5 mb-8 md:mb-16 text-left">Wristwatch for you!</h2>
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
+//           {currentProducts.map((product) => (
+//             <div
+//               key={product.unique_id}
+//               className={`bg-white w-[80vw] mx-5 md:w-[223px] h-[350px] md:h-[290px] space-y-1.5`}
+//             >
+//               <Link href={`/product/${product.url_slug}`}>
+//                 <div className="rounded-lg bg-[#FAFAFA] flex items-center justify-center relative">
+//                   <Image
+//                     src={`https://api.timbu.cloud/images/${product.photos[0].url}`}
+//                     alt={product.name}
+//                     width={176}
+//                     height={130}
+//                     priority={true}
+//                     className="object-cover mb-4 w-[300px] md:w-[176px] h-[200px] md:h-[130px]"
+//                   />
+//                 </div>
+//               </Link>
+
+//               <div className="flex items-center justify-between">
 //                 <h3 className="text-base font-medium">{product.name}</h3>
-//                 <StarRating rating={product.rating} />
+//                 <StarRating rating={4} />
 //               </div>
 //               <p className="text-gray-700 text-sm">{product.description}</p>
-//               <p className="text-base font-medium">{product.price}</p>
-//               <button className="bg-white text-xs text-[#0B7D6A] border border-[#0B7D6A] hover:bg-[#0B7D6A] hover:text-white rounded-[116px] mt-2 w-[119px] h-[36px] py-2.5 px-6">Add to Cart</button>
+//               <p className="text-base font-medium">NGN {product.current_price[0]?.NGN[0]}</p>
+//               <button
+//                 onClick={() => addToCart(product)}
+//                 className="bg-white text-xs text-[#0B7D6A] border border-[#0B7D6A] hover:bg-[#0B7D6A] hover:text-white rounded-[116px] mt-2 w-[119px] h-[36px] py-2.5 px-6"
+//               >
+//                 Add to Cart
+//               </button>
 //             </div>
 //           ))}
+//         </div>
+
+//         {/* Pagination Controls */}
+//         <div className="flex justify-center mt-8">
+//           <button
+//             onClick={() => paginate(currentPage - 1)}
+//             disabled={currentPage === 1}
+//             className={`px-4 py-2 mx-1 ${currentPage === 1 ? 'bg-gray-300' : 'bg-[#0B7D6A] text-white'}`}
+//           >
+//             Prev
+//           </button>
+//           {[...Array(Math.ceil(products.length / productsPerPage)).keys()].map((number) => (
+//             <button
+//               key={number + 1}
+//               onClick={() => paginate(number + 1)}
+//               className={`px-4 py-2 mx-1 ${currentPage === number + 1 ? 'bg-[#0B7D6A] text-white' : 'bg-white text-[#0B7D6A] border border-[#0B7D6A]'}`}
+//             >
+//               {number + 1}
+//             </button>
+//           ))}
+//           <button
+//             onClick={() => paginate(currentPage + 1)}
+//             disabled={currentPage === Math.ceil(products.length / productsPerPage)}
+//             className={`px-4 py-2 mx-1 ${currentPage === Math.ceil(products.length / productsPerPage) ? 'bg-gray-300' : 'bg-[#0B7D6A] text-white'}`}
+//           >
+//             Next
+//           </button>
 //         </div>
 //       </div>
 //     </section>
 //   );
-// }
+// };
 
 // export default Products;
 

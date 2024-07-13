@@ -1,8 +1,8 @@
 import "./globals.css";
 import localFont from "next/font/local";
 import { Inter } from "next/font/google";
+import { CartProvider } from "../context/CartContext";
 
-// Local fonts
 const pryFont = localFont({
   src: "../Satoshi-Variable.ttf",
   display: "swap",
@@ -13,7 +13,6 @@ const secFont = localFont({
   display: "swap",
 });
 
-// Google font
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -28,7 +27,7 @@ export default function RootLayout({ children }) {
         <div className={inter.className}></div>
         <div className={secFont.className}></div>
         <div className={pryFont.className}></div>
-        {children}
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );

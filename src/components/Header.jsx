@@ -1,7 +1,11 @@
+"use client"
+
 import React from 'react';
 import Image from 'next/image';
 import localFont from 'next/font/local';
 import Link from 'next/link';
+import { useCart } from '../context/CartContext';
+
 
 const pryFont = localFont({
   src: "../Satoshi-Variable.ttf",
@@ -14,6 +18,8 @@ const secFont = localFont({
 });
 
 const Header = () => {
+  const { cart } = useCart();
+
   return (
     <header className={`px-5 md:px-20 w-screen bg-white text-slate-900 py-10 ${pryFont.className}`}>
       <div className="container mx-auto flex justify-between items-center">
@@ -50,7 +56,7 @@ const Header = () => {
 
           <div className="flex mr-10 md:mr-2">
           <Link href="/cart"><Image src="/images/cart.png" alt="cart" width={24} height={24} className="mr-2"/></Link>
-          <Link href="/cart" className="hover:text-gray-400">Cart</Link>
+          <Link href="/cart" className="hover:text-gray-400">Cart ({cart.length})</Link>
           </div>
         </div>
       </div>

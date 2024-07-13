@@ -1,9 +1,27 @@
+"use client";
+
 import React from "react";
 import Header from "@components/Header";
 import Link from "next/link";
 import Image from "next/image";
+import { useCart } from "../../context/CartContext";
 
 const Cart = () => {
+  const {
+    cart,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    clearCart,
+  } = useCart();
+
+  const calculateSubtotal = () => {
+    return cart.reduce(
+      (acc, item) => acc + item.current_price[0]?.NGN[0] * item.quantity,
+      0
+    );
+  };
+
   return (
     <>
       <Header />
@@ -18,114 +36,122 @@ const Cart = () => {
               Description
             </div>
             <div className="font-semibold uppercase ml-32 md:ml-12">Price</div>
-            <div className="font-semibold uppercase ml-6 md:ml-14 hidden md:block ">
+            <div className="font-semibold uppercase ml-6 md:ml-14 hidden md:block">
               Quantity
             </div>
-            <div className="font-semibold uppercase hidden md:block ">
+            <div className="font-semibold uppercase hidden md:block">
               Subtotal
             </div>
           </div>
           <hr className="hidden md:block" />
-          {[
-            {
-              id: 1,
-              name: "Eclipse Chrono",
-              description:
-                "Sleek Modern Chronograph with a black dial and stainless steel brand perfect for any occasion.",
-              price: "NGN 36,000",
-              quantity: 5,
-              image: "/images/eclipse.png",
-            },
-            {
-              id: 2,
-              name: "Urban Classic",
-              description:
-                "Sleek Modern Chronograph with a black dial and stainless steel brand perfect for any occasion.",
-              price: "NGN 50,000",
-              quantity: 2,
-              image: "/images/urbanblue.png",
-            },
-          ].map((product) => (
-            <div
-              key={product.id}
-              className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-4 md:mb-16 mt-4"
-            >
-              <div>
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  width={176}
-                  height={130}
-                  className="w-[100px] h-[100px] object-cover ml-2 md:ml-16 mb-4 border border-[#E6E6E6] rounded-2xl"
-                />
-              </div>
-              <div>
-                <h1 className="text-base md:text-2xl text-[#313131] font-semibold mb-2">
-                  {product.name}
-                </h1>
-                <p className="text-[#797F8B] text-[10px] md:text-xs">
-                  {product.description}
-                </p>
-              </div>
-              <div className="text-center font-semibold text-base md:text-2xl text-[#313131]">
-                {product.price}
-                <div className="md:hidden flex items-center justify-center space-x-1 md:space-x-2 bg-white rounded-3xl h-fit w-fit p-2 ml-4 md:ml-10 mt-4">
-                  <div className="rounded-full bg-gray-300 w-6 md:w-8 h-6 md:h-8 flex items-center justify-center">
+          {cart.length === 0 ? (
+            <div className="text-center py-10">
+              Your cart is empty. <Link href="/">Continue shopping</Link>
+            </div>
+          ) : (
+            cart.map((product) => (
+              <div
+                key={product.unique_id}
+                className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-4 md:mb-16 mt-4"
+              >
+                <div>
+                  <Image
+                    src={`https://api.timbu.cloud/images/${product.photos[0].url}`}
+                    alt={product.name}
+                    width={176}
+                    height={130}
+                    className="w-[100px] h-[100px] object-cover ml-2 md:ml-16 mb-4 border border-[#E6E6E6] rounded-2xl"
+                  />
+                </div>
+                <div>
+                  <h1 className="text-base md:text-2xl text-[#313131] font-semibold mb-2">
+                    {product.name}
+                  </h1>
+                  <p className="text-[#797F8B] text-[10px] md:text-xs">
+                    {product.description}
+                  </p>
+                  <button
+                    className="text-red-500 text-xs md:text-sm mt-2"
+                    onClick={() => removeFromCart(product)}
+                  >
+                    Remove
+                  </button>
+                </div>
+                <div className="text-center font-semibold text-base md:text-2xl text-[#313131]">
+                  NGN {product.current_price[0]?.NGN[0]}
+                  <div className="md:hidden flex items-center justify-center space-x-1 md:space-x-2 bg-white rounded-3xl h-fit w-fit p-2 ml-4 md:ml-10 mt-4">
+                    <div
+                      className="rounded-full bg-gray-300 w-6 md:w-8 h-6 md:h-8 flex items-center justify-center cursor-pointer"
+                      onClick={() => decrementQuantity(product)}
+                    >
+                      <span className="text-black">-</span>
+                    </div>
+                    <span className="px-2 py-1 text-base md:text-lg font-medium">
+                      {product.quantity}
+                    </span>
+                    <div
+                      className="rounded-full bg-[#0B7D6A] w-6 md:w-8 h-6 md:h-8 flex items-center justify-center cursor-pointer"
+                      onClick={() => incrementQuantity(product)}
+                    >
+                      <span className="text-white">+</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="hidden md:flex items-center justify-center space-x-1 md:space-x-2 bg-white rounded-3xl h-fit w-fit p-2 md:ml-5">
+                  <div
+                    className="rounded-full bg-gray-300 w-6 md:w-8 h-6 md:h-8 flex items-center justify-center cursor-pointer z-[1000]"
+                    onClick={() => decrementQuantity(product)}
+                  >
                     <span className="text-black">-</span>
                   </div>
                   <span className="px-2 py-1 text-base md:text-lg font-medium">
                     {product.quantity}
                   </span>
-                  <div className="rounded-full bg-[#0B7D6A] w-6 md:w-8 h-6 md:h-8 flex items-center justify-center">
+                  <div
+                    className="rounded-full bg-[#0B7D6A] w-6 md:w-8 h-6 md:h-8 flex items-center justify-center cursor-pointer z-[1000]"
+                    onClick={() => incrementQuantity(product)}
+                  >
                     <span className="text-white">+</span>
                   </div>
                 </div>
-              </div>
-              <div className="hidden md:flex items-center justify-center space-x-1 md:space-x-2 bg-white rounded-3xl h-fit w-fit p-2 md:ml-10 ">
-                <div className="rounded-full bg-gray-300 w-6 md:w-8 h-6 md:h-8 flex items-center justify-center">
-                  <span className="text-black">-</span>
-                </div>
-                <span className="px-2 py-1 text-base md:text-lg font-medium">
-                  {product.quantity}
-                </span>
-                <div className="rounded-full bg-[#0B7D6A] w-6 md:w-8 h-6 md:h-8 flex items-center justify-center">
-                  <span className="text-white">+</span>
+                <div className="hidden md:block text-center font-semibold text-base md:text-2xl text-[#313131] ml-[-120px]">
+                  NGN {product.current_price[0]?.NGN[0] * product.quantity}
                 </div>
               </div>
-              <div className="hidden md:block text-center font-semibold text-base md:text-2xl text-[#313131] ml-[-120px]">
-                {product.price}
-              </div>
+            ))
+          )}
+          {cart.length > 0 && (
+            <div className="flex justify-center mt-4">
+              <button
+                className="bg-white hover:bg-[#0B7D6A] text-sm leading-4 text-[#0B7D6A] hover:text-white border border-[#0B7D6A] rounded-xl mt-2 w-[109px] md:w-[157px] h-[39px] md:h-[49px] "
+                onClick={clearCart}
+              >
+                Clear Cart
+              </button>
             </div>
-          ))}
+          )}
         </div>
 
         <div className="hidden md:flex justify-between items-center mx-auto my-10 bg-white text-[#797F8B]">
           <div className="flex items-center justify-between w-[200px] h-[56px] px-4 rounded-lg border border-[#E6E6E6]">
-            <p className="text-xs font-normal leading-5 ">Discount</p>
+            <p className="text-xs font-normal leading-5">Discount</p>
             <h2 className="text-base font-medium leading-8">NGN 0</h2>
           </div>
           <div className="flex items-center justify-between w-[200px] h-[56px] px-4 rounded-lg border border-[#E6E6E6]">
-            <p className="text-xs font-normal leading-5 ">Delivery</p>
+            <p className="text-xs font-normal leading-5">Delivery</p>
             <h2 className="text-base font-medium leading-8">NGN 0</h2>
           </div>
           <div className="flex items-center justify-between w-[220px] h-[56px] px-4 rounded-lg border border-[#E6E6E6]">
-            <p className="text-xs font-normal leading-5 ">Subtotal</p>
-            <h2 className="text-base font-medium leading-8">NGN 280,000</h2>
+            <p className="text-xs font-normal leading-5">Subtotal</p>
+            <h2 className="text-base font-medium leading-8">
+              NGN {calculateSubtotal()}
+            </h2>
           </div>
           <div className="flex items-center justify-between w-[240px] h-[56px] px-4 rounded-lg border border-[#E6E6E6]">
-            <p className="text-xs font-normal leading-5 ">Total</p>
-            <h2 className="text-2xl font-medium leading-8">NGN 280,000</h2>
-          </div>
-        </div>
-
-        <div className="md:hidden w-[80vw] mx-10 mt-5 bg-white text-[#797F8B]">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-normal leading-5 ">Subtotal</p>
-            <h2 className="text-base font-medium leading-8">NGN 280,000</h2>
-          </div>
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-normal leading-5 ">Total</p>
-            <h2 className="text-xl font-medium leading-9">NGN 280,000</h2>
+            <p className="text-xs font-normal leading-5">Total</p>
+            <h2 className="text-2xl font-medium leading-8">
+              NGN {calculateSubtotal()}
+            </h2>
           </div>
         </div>
 

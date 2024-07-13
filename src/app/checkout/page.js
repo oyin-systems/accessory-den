@@ -1,11 +1,35 @@
+"use client";
+
 import React from "react";
 import Header from "../../components/Header";
 import Link from "next/link";
 import Image from "next/image";
 import creditcard from "public/images/creditcard.png";
 import mastercard from "public/images/mastercard.png";
+import { useCart } from "../../context/CartContext";
 
 const Checkout = () => {
+  const { cart } = useCart();
+  console.log("Cart Items:", cart);
+
+  const calculateTotal = () => {
+    return cart.reduce((total, item) => {
+      const price = parseFloat(item.current_price[0]?.NGN[0]);
+      const quantity = parseInt(item.quantity, 10);
+
+      console.log(
+        `Item: ${item.current_price[0]?.NGN[0]}, Price: ${price}, Quantity: ${quantity}`
+      );
+
+      if (!isNaN(price) && !isNaN(quantity)) {
+        return total + price * quantity;
+      }
+      return total;
+    }, 0);
+  };
+
+  const total = cart && cart.length > 0 ? calculateTotal() : 0;
+
   return (
     <>
       <Header />
@@ -99,52 +123,6 @@ const Checkout = () => {
             </div>
           </form>
 
-          {/* mobile */}
-          <div className="container block ml-[-40px] md:ml-0 md:hidden mt-2 md:mt-10 px-3 md:px-12 py-10 md:w-[40%] mb-5 md:mb-20">
-            <div className="w-[90vw] md:w-[475px] h-[330px] rounded-2xl bg-[#FAFAFA]">
-              <h1 className="text-xl font-bold mb-6 text-center py-4">
-                Cart Summary
-              </h1>
-              <div className="flex items-center justify-between px-8 mb-8">
-                <div>
-                  <h3 className="text-base font-semibold leading-5 text-[#313131] mb-1">
-                    5 X Eclipse Chrono
-                  </h3>
-                  <p className="text-[10px] leading-3 font-normal text-[#797F8B]">
-                    Sleek modern chronograph with
-                    <br />a black dial
-                  </p>
-                </div>
-                <h3 className="text-lg font-semibold leading-7 text-[#313131]">
-                  NGN 180,000
-                </h3>
-              </div>
-              <div className="flex items-center justify-between px-8 mb-8">
-                <div>
-                  <h3 className="text-base font-semibold leading-5 text-[#313131] mb-1">
-                    2 X Urban Classic
-                  </h3>
-                  <p className="text-[10px] leading-3 font-normal text-[#797F8B]">
-                    Sleek modern chronograph with
-                    <br />a black dial
-                  </p>
-                </div>
-                <h3 className="text-lg font-semibold leading-7 text-[#313131]">
-                  NGN 100,000
-                </h3>
-              </div>
-              <hr />
-              <div className="flex items-center justify-between mt-4 mr-6">
-                <p className="ml-10 text-sm leading-3 font-normal text-[#797F8B]">
-                  Total
-                </p>
-                <h3 className="text-lg mr-2 font-semibold leading-7 text-[#797F8B]">
-                  NGN 280,000
-                </h3>
-              </div>
-            </div>
-          </div>
-
           <h1 className="text-xl font-bold mb-6">Payment Method</h1>
           <form className="space-y-4">
             <div>
@@ -231,46 +209,71 @@ const Checkout = () => {
           </form>
         </div>
 
-        <div className="container hidden md:block mt-4 md:mt-10 px-3 md:px-12 py-10 md:w-[40%] mb-20">
+        <div className="container block ml-[-40px] md:ml-0 md:hidden mt-2 md:mt-10 px-3 md:px-12 py-10 md:w-[40%] mb-5 md:mb-20">
           <div className="w-[90vw] md:w-[475px] h-[330px] rounded-2xl bg-[#FAFAFA]">
             <h1 className="text-xl font-bold mb-6 text-center py-4">
               Cart Summary
             </h1>
-            <div className="flex items-center justify-between px-8 mb-8">
-              <div>
-                <h3 className="text-base font-semibold leading-5 text-[#313131] mb-1">
-                  5 X Eclipse Chrono
+            {cart.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between px-8 mb-8"
+              >
+                <div>
+                  <h3 className="text-base font-semibold leading-5 text-[#313131] mb-1">
+                    {item.quantity} X {item.name}
+                  </h3>
+                  <p className="text-[10px] leading-3 font-normal text-[#797F8B]">
+                    {item.description}
+                  </p>
+                </div>
+                <h3 className="text-lg font-semibold leading-7 text-[#313131]">
+                  NGN {item.current_price[0]?.NGN[0] * item.quantity}
                 </h3>
-                <p className="text-[10px] leading-3 font-normal text-[#797F8B]">
-                  Sleek modern chronograph with
-                  <br />a black dial
-                </p>
               </div>
-              <h3 className="text-xl font-semibold leading-7 text-[#313131]">
-                NGN 180,000
-              </h3>
-            </div>
-            <div className="flex items-center justify-between px-8 mb-8">
-              <div>
-                <h3 className="text-base font-semibold leading-5 text-[#313131] mb-1">
-                  2 X Urban Classic
-                </h3>
-                <p className="text-[10px] leading-3 font-normal text-[#797F8B]">
-                  Sleek modern chronograph with
-                  <br />a black dial
-                </p>
-              </div>
-              <h3 className="text-xl font-semibold leading-7 text-[#313131]">
-                NGN 100,000
-              </h3>
-            </div>
+            ))}
             <hr />
-            <div className="flex items-center justify-end mt-4 mr-6">
-              <p className="mr-4 text-sm leading-3 font-normal text-[#797F8B]">
+            <div className="flex items-center justify-between mt-4 mr-6">
+              <p className="ml-10 text-sm leading-3 font-normal text-[#797F8B]">
                 Total
               </p>
-              <h3 className="text-xl font-semibold leading-7 text-[#797F8B]">
-                NGN 280,000
+              <h3 className="text-lg mr-2 font-semibold leading-7 text-[#797F8B]">
+                NGN {total ? total : 0}
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <div className="container hidden md:block mt-4 md:mt-10 px-3 md:px-12 py-10 md:w-[40%] mb-20">
+          <div className="w-[90vw] md:w-[475px] h-fit pb-5 rounded-2xl bg-[#FAFAFA]">
+            <h1 className="text-xl font-bold mb-6 text-center py-4">
+              Cart Summary
+            </h1>
+            {cart.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between px-8 mb-8"
+              >
+                <div>
+                  <h3 className="text-base font-semibold leading-5 text-[#313131] mb-1">
+                    {item.quantity} X {item.name}
+                  </h3>
+                  <p className="text-[10px] leading-3 font-normal text-[#797F8B]">
+                    {item.description}
+                  </p>
+                </div>
+                <h3 className="text-lg font-semibold leading-7 text-[#313131]">
+                  NGN {item.current_price[0]?.NGN[0] * item.quantity}
+                </h3>
+              </div>
+            ))}
+            <hr />
+            <div className="flex items-center justify-between mt-4 mr-6">
+              <p className="ml-10 text-sm leading-3 font-normal text-[#797F8B]">
+                Total
+              </p>
+              <h3 className="text-lg mr-2 font-semibold leading-7 text-[#797F8B]">
+                NGN {calculateTotal()}
               </h3>
             </div>
           </div>
